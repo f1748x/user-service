@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+package api.user.v1;
+
+option go_package = "user-service/api/user/v1;v1";
+//option java_multiple_files = true;
+//option java_package = "api.user";
+import "google/api/annotations.proto";
+service user {
+	rpc CreateUser(CreateUserReq) returns(CreateUserRes){
+		option (google.api.http) = {
+			post:"/v1/add",
+			body:"*"
+		};
+	}
+	//获取用户列表
+	rpc GetUserList(GetUserListReq) returns (GetUserListRes){}
+	//获取用户信息
+	rpc GetUser(GetUserReq) returns(GetUserRes){}
+	//当前用户是否存在
+	rpc UserIsOk(GetUserIsOkReq) returns(GetUserIsOkRes){}
+	//新增收货地址
+	rpc DressPush(DressPushReq) returns(DressPushReply){}
+	//获取地址列表
+	rpc DressList(DressListReq) returns(DressListReply){}
+	//修改地址
+	rpc DressUpdate(DressUpdateReq) returns(DressUpdateReply){}
+}
+
+message User{
+	int64 id = 1;
+	string nickname = 2;
+	string pwd = 9;
+	string avatarUrl = 3;
+	string country = 4;
+	string province = 5;
+	string city = 6;
+	string uname = 7;
+	int64 status = 8;
+}
+
+message CreateUserReq{
+	string nickname = 1;
+	string pwd = 2;
+	string avatarUrl = 3;
+	string country = 4;
+	string province = 5;
+	string city = 6;
+	string uname = 7;
+	
+}
+
+message CreateUserRes{
+	string ok = 1;
+	string msg = 2;
+}
+
+
+message  GetUserListReq {
+	int64 page = 1;
+	int64 pageSize = 2;
+}
+message GetUserListRes {
+	repeated User list = 1;
+	int64 count = 2;
+	string ok = 3;
+	string msg = 4;
+}
+
+message GetUserReq{
+	string nickname = 1;
+	string pwd = 2;
+}
+message GetUserRes{
+	User userDetail = 1;
+	string msg = 2;
+	string ok = 3;
+}
+message GetUserIsOkReq{
+	
+	string nickname = 1;
+}
+message GetUserIsOkRes{
+	bool IsOk = 1;
+	string msg = 2;
+}
+
+message Dress{
+	int64 id = 1;
+	int64 user_id = 6;
+	string phone = 2;
+	string dress = 3;
+	int64 status = 4;
+}
+message DressPushReq{
+	string phone = 1;
+	string dress = 2;
+}
+message DressPushReply {
+	string ok = 1;
+	string msg = 2;
+}
+message DressListReq {
+	int64 page = 1;
+	int64 pageSize = 2;
+}
+message DressListReply{
+	repeated Dress result = 1;
+	string ok = 2;
+	string msg = 3;
+}
+
+message DressUpdateReq {
+	int64 id = 1;
+	string phone = 2;
+	string dress = 3;
+}
+message DressUpdateReply{
+	string ok = 1;
+	string msg = 2;
+}
