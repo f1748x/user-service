@@ -1,3 +1,6 @@
+service:
+  name: "T.user.service"
+  version: "v1"
 server:
   http:
     addr: 0.0.0.0:8000
