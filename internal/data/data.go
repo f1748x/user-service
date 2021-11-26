@@ -4,14 +4,17 @@ import (
 	"fmt"
 	"user-service/internal/conf"
 
+	"github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/google/wire"
+	consulAPI "github.com/hashicorp/consul/api"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewUserDataRepo)
+var ProviderSet = wire.NewSet(NewData, NewUserDataRepo, NewDiscovery)
 
 // Data .
 type Data struct {
@@ -38,4 +41,15 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	return d, func() {
 		log.Info("messge", "closing the data resources")
 	}, nil
+}
+func NewDiscovery(conf *conf.Registry) registry.Discovery {
+	c := consulAPI.DefaultConfig()
+	c.Address = conf.Consul.Address
+	c.Scheme = conf.Consul.Scheme
+	cli, err := consulAPI.NewClient(c)
+	if err != nil {
+		panic(err)
+	}
+	r := consul.New(cli, consul.WithHealthCheck(false))
+	return r
 }

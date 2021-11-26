@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 
 	log "github.com/go-kratos/kratos/v2/log"
 
@@ -36,7 +37,7 @@ func (s *UserService) CreateUser(ctx context.Context, req *pb.CreateUserReq) (*p
 	res.Msg = "请求成功!"
 	err := s.u.Create(ctx, create)
 	if err != nil {
-		return &pb.CreateUserRes{Ok: "false", Msg: err.Error()}, nil
+		return &pb.CreateUserRes{Ok: "false", Msg: err.Error()}, err
 	}
 	return &pb.CreateUserRes{Ok: "true", Msg: "创建成功!"}, nil
 }
@@ -71,6 +72,7 @@ func (s *UserService) GetUser(ctx context.Context, req *pb.GetUserReq) (*pb.GetU
 	m.Province = tmap["province"].(string)
 	m.Status = tmap["status"].(int64)
 	m.Uname = tmap["uname"].(string)
+	fmt.Println("进入了user-service----------")
 	return &pb.GetUserRes{UserDetail: m, Msg: "获取成功!", Ok: "ok"}, nil
 }
 func (s *UserService) UserIsOk(ctx context.Context, req *pb.GetUserIsOkReq) (*pb.GetUserIsOkRes, error) {
