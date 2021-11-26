@@ -1,5 +1,5 @@
 service:
-  name: "T.user.service"
+  name: "T.user.srv"
   version: "v1"
 server:
   http:

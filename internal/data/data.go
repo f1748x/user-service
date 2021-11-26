@@ -46,6 +46,7 @@ func NewDiscovery(conf *conf.Registry) registry.Discovery {
 	c := consulAPI.DefaultConfig()
 	c.Address = conf.Consul.Address
 	c.Scheme = conf.Consul.Scheme
+
 	cli, err := consulAPI.NewClient(c)
 	if err != nil {
 		panic(err)

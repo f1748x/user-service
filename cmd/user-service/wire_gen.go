@@ -24,7 +24,6 @@ func initApp(confServer *conf.Server, registry *conf.Registry, confData *conf.Da
 		return nil, nil, err
 	}
 	userRepo := data.NewUserDataRepo(dataData, logger)
-	//service.
 	userUsecase := biz.NewUserUseCase(userRepo, logger)
 	userService := service.NewuserService(userUsecase, logger)
 	httpServer := server.NewHTTPServer(confServer, userService, logger)

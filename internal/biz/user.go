@@ -28,7 +28,7 @@ type Dress struct {
 type UserRepo interface {
 	CreateUser(ctx context.Context, user *User) error
 	GetUserList(ctx context.Context, page int64, pageSize int64) ([]*User, int64, error)
-	GetUser(ctx context.Context, nickname string, pwd string) map[string]interface{}
+	GetUser(ctx context.Context, nickname string, pwd string) ([]*User, error)
 	UserIsOk(ctx context.Context, nickname string) error
 	UserAddDress(ctx context.Context, phone, dress string) error
 	GetUserAddDressList(ctx context.Context, page, pageSize int64) ([]*Dress, error)
@@ -57,7 +57,7 @@ func (c *UserUseCase) Create(ctx context.Context, user *User) error {
 	return c.repo.CreateUser(ctx, user)
 }
 
-func (c *UserUseCase) GetUser(ctx context.Context, nickname string, pwd string) map[string]interface{} {
+func (c *UserUseCase) GetUser(ctx context.Context, nickname string, pwd string) ([]*User, error) {
 	return c.repo.GetUser(ctx, nickname, pwd)
 }
 func (c *UserUseCase) UserIsOk(ctx context.Context, nickname string) error {

@@ -46,14 +46,15 @@ func (c UserDataRepo) CreateUser(ctx context.Context, user *biz.User) error {
 	}
 	return nil
 }
-func (c UserDataRepo) GetUser(ctx context.Context, nickname string, pwd string) map[string]interface{} {
+func (c UserDataRepo) GetUser(ctx context.Context, nickname string, pwd string) ([]*biz.User, error) {
 	// c.data.db
-	var tmap []map[string]interface{}
-	tx := c.data.db.Raw("select * from user where nickname=? and pwd=?", nickname, pwd).Scan(&tmap)
+	var tmap []*biz.User
+	tx := c.data.db.Raw("select * from user where nickname=? and pwd=?", nickname, pwd).Scan(tmap)
 	if tx.Error != nil {
 		fmt.Println("查询用户失败!-------")
+		return nil, tx.Error
 	}
-	return tmap[0]
+	return tmap, nil
 
 }
 func (c UserDataRepo) UserIsOk(ctx context.Context, nickname string) error {

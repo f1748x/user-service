@@ -62,16 +62,26 @@ func (s *UserService) GetUserList(ctx context.Context, req *pb.GetUserListReq) (
 	return &pb.GetUserListRes{List: r, Count: count, Ok: "ok", Msg: "查询用户列表成功!"}, nil
 }
 func (s *UserService) GetUser(ctx context.Context, req *pb.GetUserReq) (*pb.GetUserRes, error) {
-	tmap := s.u.GetUser(ctx, req.Nickname, req.Pwd)
+	fmt.Println("client---------service--------------")
+	fmt.Println(req.Nickname, req.Pwd)
+	tmap, err := s.u.GetUser(ctx, req.Nickname, req.Pwd)
 	m := &pb.User{}
-	m.AvatarUrl = tmap["avatarurl"].(string)
-	m.Nickname = tmap["nickname"].(string)
-	m.Id = tmap["id"].(int64)
-	m.City = tmap["city"].(string)
-	m.Country = tmap["country"].(string)
-	m.Province = tmap["province"].(string)
-	m.Status = tmap["status"].(int64)
-	m.Uname = tmap["uname"].(string)
+	if err != nil {
+
+		return &pb.GetUserRes{UserDetail: m, Msg: "该用户不存在!", Ok: "false!"}, nil
+	}
+	// m := &pb.User{}
+	for _, v := range tmap {
+		m.AvatarUrl = v.AvatarUrl
+		m.Nickname = v.NickName
+		m.Id = v.Id
+		m.City = v.City
+		m.Country = v.Country
+		m.Province = v.Province
+		m.Status = v.Status
+		m.Uname = v.Uname
+	}
+
 	fmt.Println("进入了user-service----------")
 	return &pb.GetUserRes{UserDetail: m, Msg: "获取成功!", Ok: "ok"}, nil
 }
